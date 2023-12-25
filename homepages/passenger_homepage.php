@@ -15,10 +15,10 @@ $query = "SELECT u.*, p.* FROM User u
           WHERE u.ID = $passengerId";
 
 $result = mysqli_query($conn, $query);
-
+$passenger='';
 if ($result) {
     $mergedData = mysqli_fetch_assoc($result);
-
+    $passenger=$mergedData['ID'];
     mysqli_free_result($result);
     $bookedFlightsQuery = "SELECT COUNT(*) AS bookedFlightsCount FROM passengerflights WHERE passengerID = $passengerId AND status = 'booked'";
     $bookedFlightsResult = mysqli_query($conn, $bookedFlightsQuery);
@@ -42,7 +42,7 @@ if (!$completedFlightsResult) {
 $completedFlightsCount = mysqli_num_rows($completedFlightsResult);
 $pendingFlightsQuery = "SELECT Name, Fees FROM passengerflights 
                        JOIN flight ON passengerflights.flightID = flight.ID
-                       WHERE passengerID = $passengerId AND status = 'pending'";
+                       WHERE passengerID = $passenger AND status = 'current'";
 
 $pendingFlightsResult = mysqli_query($conn, $pendingFlightsQuery);
 

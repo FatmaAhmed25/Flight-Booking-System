@@ -54,20 +54,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo "Error updating name: " . mysqli_error($conn);
         }
     }
+   
 
     if (isset($_POST['update_email'])) {
-        $newEmail = mysqli_real_escape_string($conn, $_POST['new_email']);
-        $updateEmailQuery = "UPDATE User SET Email = '$newEmail' WHERE ID = $passengerId";
-        
-        if (mysqli_query($conn, $updateEmailQuery)) {
-            echo "Email updated successfully.";
-        } else {
-            echo "Error updating email: " . mysqli_error($conn);
-        }
-    }
+      $newEmail = mysqli_real_escape_string($conn, $_POST['new_email']);
+  
+      // Check if email already exists
+      $checkEmailQuery = "SELECT * FROM User WHERE Email = '$newEmail'";
+      $result = mysqli_query($conn, $checkEmailQuery);
+  
+      if (mysqli_num_rows($result) > 0) {
+          echo "<script>alert('There is an existing account with this email.');</script>";
+      } else {
+          $updateEmailQuery = "UPDATE User SET Email = '$newEmail' WHERE ID = $passengerId";
+  
+          if (mysqli_query($conn, $updateEmailQuery)) {
+              echo "<script>alert('Email updated successfully.');</script>";
+          } else {
+              echo "<script>alert('Error updating email: " . mysqli_error($conn) . "');</script>";
+          }
+      }
+  }
+  
+  
 
     if (isset($_POST['update_password'])) {
-        $newPassword = password_hash($_POST['new_password'], PASSWORD_DEFAULT);
+        $newPassword = mysqli_real_escape_string($conn, $_POST['new_password']);
         $updatePasswordQuery = "UPDATE User SET Password = '$newPassword' WHERE ID = $passengerId";
         
         if (mysqli_query($conn, $updatePasswordQuery)) {
@@ -159,12 +171,16 @@ body {
   background: linear-gradient(to right, #3fb6a8, #7ed386);
   overflow: hidden;
   box-sizing: border-box;
+  background-image: url('../photos/bg.jpg');
+    background-size: cover;
+    background-position: center;
+
 }
 
 .container {
   background: #fff;
   width: 540px;
-  height: 420px;
+  height: 500px;
   margin: 0 auto;
   position: relative;
   margin-top: 10%;
@@ -182,7 +198,7 @@ body {
   letter-spacing: 1px;
 }
 
-.CTA {
+/* .CTA {
   width: 80px;
   height: 40px;
   right: -20px;
@@ -195,9 +211,9 @@ body {
   transform: rotate(-90deg);
   transition: all 0.5s ease-in-out;
   cursor: pointer;
-}
+} */
 
-.CTA h1 {
+/* .CTA h1 {
   color: #fff;
   margin-top: 10px;
   margin-left: 9px;
@@ -206,7 +222,7 @@ body {
 .CTA:hover {
   background: #3fb6a8;
   transform: scale(1.1);
-}
+} */
 
 .leftbox {
   float: left;
@@ -215,7 +231,7 @@ body {
   position: absolute;
   width: 15%;
   height: 110%;
-  background: #7ed386;
+  background: #653d58;;
   box-shadow: 3px 3px 10px rgba(119, 119, 119, 0.5);
 }
 
@@ -229,7 +245,7 @@ nav a {
 }
 
 nav a:hover {
-  color: #3fb6a8;
+  color: #fd891e;
   transform: scale(1.2);
   cursor: pointer;
 }
@@ -238,14 +254,13 @@ nav a:first-child {
   margin-top: 7px;
 }
 
-.active {
-  color: #3fb6a8;
-}
+
 
 .rightbox {
-  float: right;
+  /* float: right; */
   width: 60%;
   height: 100%;
+  padding-left: 170px;
 }
 
 .profile {
@@ -255,8 +270,8 @@ nav a:first-child {
 
 h1 {
   font-family: "Montserrat", sans-serif;
-  color: #7ed386;
-  font-size: 1em;
+  color: #653d58;
+  font-size: 1.01em;
   margin-top: 40px;
   margin-bottom: 35px;
 }
@@ -274,7 +289,7 @@ h2 {
 p {
   border-width: 1px;
   border-style: solid;
-  border-image: linear-gradient(to right, #3fb6a8, rgba(126, 211, 134, 0.5)) 1
+  border-image: linear-gradient(to right, #653d58, rgba(126, 211, 134, 0.5)) 1
     0%;
   border-top: 0;
   width: 80%;
@@ -290,7 +305,7 @@ p {
   text-transform: uppercase;
   font-size: 10px;
   border: none;
-  color: #3fb6a8;
+  color: #653d58;
 }
 
 .btn:hover {
@@ -298,60 +313,62 @@ p {
   font-weight: 900;
 }
 
-footer {
-  position: absolute;
-  width: 20%;
-  bottom: 0;
-  right: -20px;
-  text-align: right;
-  font-size: 0.8em;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-family: "Roboto", sans-serif;
-}
 
-footer p {
-  border: none;
-  padding: 0;
-}
-
-footer a {
-  color: #fff;
-  text-decoration: none;
-}
-
-footer a:hover {
-  color: #7d7d7d;
-}
 .profile-photo {
   border-radius: 50%;
-  width: 300px; /* Increase the width */
-  height: 150px; /* Increase the height */
+  width: 300px; 
+  height: 150px; 
   object-fit: cover;
-  /* margin-left: 150px; */
+  
 }
 
 .pp img {
   margin-top: 30px;
-  width: 100px; /* Increase the width */
+  width: 100px; 
   border-radius: 50%;
   height: 100px;
 }
 
-.pp {
-  width: 300px; /* Increase the width */
-}
+/* .pp {
+  width: 300px; 
+  
+} */
 
 .pf{
   display: flex;
-  padding-top: 10px;
-  justify-content: space-between;
+  /* padding-top: 20px; */
+  /* justify-content: space-between; */
+  
   width:450px;
 }
-/* .t{
-  width:50px;
-  padding-right: 120px;
-} */
+.t{
+  padding-top: 40px;
+  padding-right: 30px;
+}
+.rightbox input{
+  border-color:white ;
+}
+.profile2 h2{
+  /* padding-top: 50px; */
+}
+.profile2 .pp img{
+  margin-top: 10px;
+  border-radius: 20%;
+  width: 110px;
+  height:110px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.rightbox .profile2 {
+ padding-top: 50px;
+  
+}
+
+.profile2{
+  position: absolute;
+  width: 70%;
+}
+
 
 
 
@@ -375,11 +392,11 @@ footer a:hover {
                 <i class="fa fa-user"></i>
             </a>
             <br><br>
-            <a href="#">
+            <a href="#" class="active">
                 <i class="fa fa-camera"></i>
             </a>
             <br><br>
-            <a href="your_exit_page.php">
+            <a href="../homepages/passenger_homepage.php" class="active">
                 <i class="fa fa-sign-out"></i>
             </a>   
         </nav>
@@ -387,7 +404,7 @@ footer a:hover {
 
       <div class="rightbox">
 
-            <div class="profile"  id="personalInfoSection">
+            <div class="profile"  id="personalInfoSection" >
                 <div class="pf"> 
                     <div class="t"><h1>Personal Info</h1></div>
                     <div class="pp">
@@ -438,6 +455,41 @@ footer a:hover {
         </form>
 
         </div>
+   
+
+
+
+
+
+        <div class="profile2" id="photoUpdateSection" style="display: none;">
+    
+        <form action="profile.php" method="post" enctype="multipart/form-data">
+          
+            <h2>Passenger Photo</h2>
+            <div class="pp"><img src="../<?php echo $userData['Photo']; ?>" alt="Passenger Photo" class="profile-photo" /> </div>
+              <p>
+                  <input type="file" name="new_passenger_photo" />
+                  <button type="submit" class="btn" name="update_passenger_photo">Update</button>
+              </p>
+        </form>
+
+        <form action="profile.php" method="post" enctype="multipart/form-data">
+            <h2>Passport Photo</h2>
+            <div class="pp"><img src="../<?php echo $userData['PassportImg']; ?>" alt="Passenger Photo" class="profile-photo" /> </div> 
+            <p>
+                <input type="file" name="new_passport_photo" />
+                <button type="submit" class="btn" name="update_passport_photo">Update</button>
+            </p>
+           
+        </form>
+  </div>
+  
+
+        
+
+
+
+
 
         </div>
       </div>
@@ -448,8 +500,6 @@ footer a:hover {
 
 
 
-    <!-- <footer>
-    </footer> -->
     
 
 
@@ -464,11 +514,15 @@ footer a:hover {
             cameraIcon.addEventListener("click", function () {
                 personalInfoSection.style.display = "none";
                 photoUpdateSection.style.display = "block";
+                cameraIcon.style.color="#fd891e";
+                userIcon.style.color="white";
             });
 
             userIcon.addEventListener("click", function () {
                 personalInfoSection.style.display = "block";
                 photoUpdateSection.style.display = "none";
+                userIcon.style.color="#fd891e";
+                cameraIcon.style.color="white";
             });
         });
     </script>

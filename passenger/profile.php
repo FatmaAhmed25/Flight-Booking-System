@@ -179,7 +179,7 @@ body {
 
 .container {
   background: #fff;
-  width: 540px;
+ width: 660px;
   height: 500px;
   margin: 0 auto;
   position: relative;
@@ -198,31 +198,7 @@ body {
   letter-spacing: 1px;
 }
 
-/* .CTA {
-  width: 80px;
-  height: 40px;
-  right: -20px;
-  bottom: 0;
-  margin-bottom: 90px;
-  position: absolute;
-  z-index: 1;
-  background: #7ed386;
-  font-size: 1em;
-  transform: rotate(-90deg);
-  transition: all 0.5s ease-in-out;
-  cursor: pointer;
-} */
 
-/* .CTA h1 {
-  color: #fff;
-  margin-top: 10px;
-  margin-left: 9px;
-}
-
-.CTA:hover {
-  background: #3fb6a8;
-  transform: scale(1.1);
-} */
 
 .leftbox {
   float: left;
@@ -349,7 +325,7 @@ p {
   border-color:white ;
 }
 .profile2 h2{
-  /* padding-top: 50px; */
+font-size: 10px;
 }
 .profile2 .pp img{
   margin-top: 10px;
@@ -368,6 +344,7 @@ p {
   position: absolute;
   width: 70%;
 }
+
 
 
 

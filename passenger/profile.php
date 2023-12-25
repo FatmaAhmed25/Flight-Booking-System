@@ -7,6 +7,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'passenger') {
     exit();
 }
 
+$emailUpdated = true;
 $passengerId = $_SESSION['user_id'];
 $query = "SELECT u.*, p.* FROM User u
           LEFT JOIN Passenger p ON u.ID = p.UserID
@@ -67,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           echo "<script>alert('There is an existing account with this email.');</script>";
       } else {
           $updateEmailQuery = "UPDATE User SET Email = '$newEmail' WHERE ID = $passengerId";
+          $emailUpdated = false;
   
           if (mysqli_query($conn, $updateEmailQuery)) {
               echo "<script>alert('Email updated successfully.');</script>";
@@ -75,6 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           }
       }
   }
+  if (!$emailUpdated) {
+    echo "<script>alert('The email was not updated.');</script>";
+}
   
   
 
@@ -150,7 +155,7 @@ if (isset($_FILES['new_passport_photo']) && $_FILES['new_passport_photo']['error
 
     
 
-   // After processing the form submission, add:
+//    // After processing the form submission, add:
 header("Location: profile.php");
 exit();
 }
@@ -185,6 +190,7 @@ body {
   position: relative;
   margin-top: 10%;
   box-shadow: 2px 5px 20px rgba(119, 119, 119, 0.5);
+ 
 }
 
 .logo {

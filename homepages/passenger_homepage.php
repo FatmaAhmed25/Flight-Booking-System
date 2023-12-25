@@ -352,6 +352,13 @@ a {
         font-weight: bold;
         color: #0091ff; /* Change this to your desired color */
     }
+    /* .about{
+      justify-content: space-between;
+    }
+    span
+    {
+      padding-right: 40px;
+    } */
 
  
   </style>
@@ -411,7 +418,7 @@ a {
 
 
       <ul class="about">
-        <li><span><?php echo $bookedFlightsCount; ?></span>Completed Flight</li>
+        <!-- <li><span><?php echo $bookedFlightsCount; ?></span>Completed Flight</li> -->
         <li><span><?php echo $mergedData['Account']; ?>$</span>Account</li>
         <li><span><?php echo $mergedData['ID']; ?></span>passengerID</li>
       </ul>

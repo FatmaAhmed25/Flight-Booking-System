@@ -55,7 +55,7 @@ CREATE TABLE Flight (
 CREATE TABLE PassengerFlights (
     PassengerID INT,
     FlightID INT,
-    Status ENUM('completed', 'pending'),
+    Status ENUM('completed', 'current'),
     FOREIGN KEY (PassengerID) REFERENCES Passenger(ID),
     FOREIGN KEY (FlightID) REFERENCES Flight(ID)
 );

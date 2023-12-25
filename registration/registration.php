@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <!DOCTYPE html>
@@ -98,4 +98,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p>Already have an account? <a href="../login/login.php">Login</a></p>
         </div>
     </div>
-</body>
+</body> -->

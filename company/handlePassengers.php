@@ -14,26 +14,18 @@ $registeredPassengers = [];
 $pendingPassengers = [];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accept_passenger'])) {
-    $passenger_id = $_POST['passenger_id'];
+    $booking_id = $_POST['booking_id']; // Get the booking id from the form
 
-    // Fetch the passenger's payment method
-    echo("$passenger_id");
-    echo("$flightId");
-    $query = "SELECT PaymentMethod FROM PassengerFlights WHERE PassengerID = '$passenger_id' AND FlightID = '$flightId'";
+    // Fetch the passenger's payment method and flight fees
+    $query = "SELECT PaymentMethod, Fees FROM PassengerFlights JOIN Flight ON PassengerFlights.FlightID = Flight.ID WHERE BookingID = '$booking_id'";
     $result = mysqli_query($conn, $query);
-    $paymentMethod = mysqli_fetch_assoc($result)["PaymentMethod"];
-    //mysqli_free_result($result);
-    $query2 = "SELECT * FROM Flight WHERE ID = '$flightId'";
-    $result2 = mysqli_query($conn, $query2);
-    $flight = mysqli_fetch_assoc($result2);
-    mysqli_free_result($result2);
-    $x=$flight['Fees'];
-    
+    $row = mysqli_fetch_assoc($result);
+    $paymentMethod = $row["PaymentMethod"];
+    $fees = $row["Fees"];
 
     // If the payment method is 'account', deduct the flight fees from the passenger's account
     if ($paymentMethod == 'account') {
-        echo("$x");
-        $query = "UPDATE Passenger SET Account = Account - '$x' WHERE ID = '$passenger_id'";
+        $query = "UPDATE Passenger SET Account = Account - '$fees' WHERE ID IN (SELECT PassengerID FROM PassengerFlights WHERE BookingID = '$booking_id')";
         $result = mysqli_query($conn, $query);
 
         if (!$result) {
@@ -41,14 +33,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accept_passenger'])) {
         }
     }
 
-    // Update the companyStatus field to 'registered'
-    $query = "UPDATE PassengerFlights SET companystatus = 'registered' WHERE PassengerID = '$passenger_id' AND FlightID = '$flightId'";
+    // Update the companyStatus field to 'registered' for this specific booking
+    $query = "UPDATE PassengerFlights SET companystatus = 'registered' WHERE BookingID = '$booking_id'";
     $result = mysqli_query($conn, $query);
 
     if (!$result) {
         echo "Error executing query: " . mysqli_error($conn);
     }
 }
+
 
 // Fetch the registered passengers
 $query = "SELECT * FROM PassengerFlights JOIN Passenger ON PassengerFlights.PassengerID = Passenger.ID JOIN User ON Passenger.UserID = User.ID WHERE FlightID = '$flightId' AND companyStatus = 'registered'";
@@ -72,80 +65,7 @@ if ($result) {
     mysqli_free_result($result);
 }
 ?>
-<!-- <!DOCTYPE html>
-<html>
 
-<head>
-    <style>
-        body {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 8px;
-        }
-
-        .card ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .card li {
-            margin-bottom: 8px;
-        }
-
-        .accept-btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="card">
-        <h2>Pending Passengers</h2>
-        <ul>
-            <?php foreach ($pendingPassengers as $passenger): ?>
-                <li>
-                    <?php echo $passenger['Name']; ?>
-                    <form method="POST" action="handlePassengers.php?flight_id=<?php echo $flightId; ?>">
-                        <input type="hidden" name="passenger_id" value="<?php echo $passenger['PassengerID']; ?>">
-                        <button class="accept-btn" type="submit" name="accept_passenger">Accept</button>
-                    </form>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-
-    <div class="card">
-        <h2>Registered Passengers</h2>
-        <ul>
-            <?php foreach ($registeredPassengers as $passenger): ?>
-                <li>
-                    <?php echo $passenger['Name']; ?>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-</body>
-
-</html> -->
 
 <!DOCTYPE html>
 <html>
@@ -396,12 +316,12 @@ table td{
             <tbody>
             <?php foreach ($pendingPassengers as $passenger): ?>
                 <tr>
-                    <td><?php echo $passenger['ID']; ?></td>
-                    <td><?php echo $passenger['Name']; ?></td>
-                    <td><?php echo $passenger['Amount']; ?></td>
+                    <td><?php echo $passenger['PassengerID']; ?></td>
+                    <!-- <td><?php echo $passenger['Name']; ?></td>
+                    <td><?php echo $passenger['Amount']; ?></td> -->
                     <td>
                         <form method="POST" action="handlePassengers.php?flight_id=<?php echo $flightId; ?>">
-                            <input type="hidden" name="passenger_id" value="<?php echo $passenger['PassengerID']; ?>">
+                        <input type="hidden" name="booking_id" value="<?php echo $passenger['BookingID']; ?>">
                             <button class="accept-btn" type="submit" name="accept_passenger">Accept</button>
                             <button class="reject-btn" type="submit" name="reject_passenger">Reject</button>
                         </form>

@@ -40,6 +40,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accept_passenger'])) {
     if (!$result) {
         echo "Error executing query: " . mysqli_error($conn);
     }
+    header("Location: handlepassengers.php");
+    exit();
+
 }
 
 
@@ -64,6 +67,22 @@ if ($result) {
     }
     mysqli_free_result($result);
 }
+function getUserCountByCompanyStatus($conn, $flightId, $status)
+{
+    $query = "SELECT COUNT(*) AS count FROM PassengerFlights WHERE FlightID = '$flightId' AND companystatus = '$status'";
+    $result = mysqli_query($conn, $query);
+
+    if ($result) {
+        $row = mysqli_fetch_assoc($result);
+        return $row['count'];
+    } else {
+        return 0; // Return 0 if there is an error or no results
+    }
+}
+
+// Get the counts
+$registeredCount = getUserCountByCompanyStatus($conn, $flightId, 'registered');
+$pendingCount = getUserCountByCompanyStatus($conn, $flightId, 'pending');
 ?>
 
 
@@ -74,55 +93,156 @@ if ($result) {
     <style>
 <span style="font-family: verdana, geneva, sans-serif;">/*  import google fonts */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+:root{
+  --main-color: #DD2F6E;
+  --color-dark: #1D2231;
+  --text-grey: #8390A2;
+
+}
 *{
   margin: 0;
   padding: 0;
-  border: none;
-  outline: none;
   text-decoration: none;
   box-sizing: border-box;
+  list-style-type:none ;
   font-family: "Poppins", sans-serif;
 }
-body{
-  background: rgb(219, 219, 219);
+.sidebar{
+  width: 320px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
 }
-.header{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 60px;
-  padding: 20px;
+.main-content{
+  margin-left:220px ;
+}
+.sidebar-brand{
+  height: 90px;
+  padding: 1rem 0rem 1rem 2rem;
+  color: #89CFF0;
+
+}
+.sidebar-brand span{
+  display: inline-block;
+  padding-right: 1rem;
+}
+.sidebar-menu li{
+  width: 100%;
+  margin-bottom: 1.3rem;
+  padding-left: 20px;
+}
+.sidebar-menu a{
+  display: block;
+  color: #89CFF0;
+  font-size: 1.1rem;
+}
+.sidebar-menu a span:first-child{
+  font-size: 1.5rem;
+  padding-right: 1rem;
+}
+.sidebar-menu a.active{
   background: #fff;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  color: #1D2231;
+  padding-left: 20px;
+  border-radius:30px 0px 0px 30px ;
 }
-.logo{
+/* body{
+  background: rgb(219, 219, 219);
+} */
+
+header{
   display: flex;
-  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.6rem;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
 }
-.logo a{
-  color: #000;
-  font-size: 18px;
-  font-weight: 600;
-  margin: 2rem 8rem 2rem 2rem;
+.sidebar-menu{
+  margin-top: 1rem;
 }
-.search_box{
+header h2{
+  color: #222;
+
+}
+header label span{
+  font-size: 1.7rem;
+  padding-right: 1rem;
+}
+
+main{
+  margin-top: 85px;
+  padding: 2rem 1.5rem;
+  /* background: #f1f5f9; */
+  min-height: calc(100vh - 85px);
+}
+
+.cards {
+  display: flex; /* Use flexbox to arrange the divs side by side */
+  justify-content: space-between; /* Add space between the two divs */
+  margin-top: -90px;
+}
+
+.card-single {
+  width: 48%; /* Adjust the width as needed */
   display: flex;
+  justify-content: space-between;
+  background: #fff;
+  padding: 20px; /* Add padding as needed */
+  border-radius: 8px; /* Add border-radius for a rounded appearance */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box-shadow for a subtle effect */
+}
+
+.card-single h1 {
+  font-size: 35px; /* Adjust font size as needed */
+}
+
+.card-single span {
+  font-size: 14px; /* Adjust font size as needed */
+  color: var(--text-grey); /* Use variable for consistent color */
+}
+.card-single span:first-child{
+  color: var(--text-grey);
+}
+.card-single span:last-child{
+  font-size: 2rem;
+}
+
+table{
+  border-collapse: collapse;
+}
+
+.recent-grid{
+  margin-top: 3.5rem;
+  display: grid;
+  /* grid-gap: 2rem; */
+  grid-template-columns: 50% auto;
+
+}
+.card{
+  background: #fff;
+  border-radius: 5px;
+}
+.card-header, .card-body{
+  padding: 1rem;
+}
+.card-header{
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid #f0f0f0;
 }
-.search_box input{
-  padding: 9px;
-  width: 250px;
-  background: rgb(228, 228, 228);
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-}
-.search_box i{
-  padding: 0.66rem;
-  cursor: pointer;
+.card-header button{
+  background:var(--main-color);
+  border-radius: 10px;
   color: #fff;
-  background: #000;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  font-size: .8rem;
+  padding: .5rem 1rem;
+  border: 1px solid var(--main-color);
 }
+
 .header-icons{
   display: flex;
   align-items: center;
@@ -144,31 +264,13 @@ body{
   border-radius: 50%;
 }
 .container{
-  margin-top: 10px;
   display: flex;
   justify-content: space-between;
 }
 
 /* Side menubar section */
 nav{
-  background: #fff;
-}
-.side_navbar{
-  padding: 1px;
-  display: flex;
-  flex-direction: column;
-}
-.side_navbar span{
-  color: gray;
-  margin: 1rem 3rem;
-  font-size: 12px;
-}
-.side_navbar a{
-  width: 100%;
-  padding: 0.8rem 3rem;
-  font-weight: 500;
-  font-size: 15px;
-  color: rgb(100, 100, 100);
+    background: rgba(0, 0, 0, 0.5);
 }
 .links{
   margin-top: 5rem;
@@ -187,31 +289,11 @@ nav{
 
 /* Main Body Section */
 .main-body{
-  width: 70%;
+  width: 48%;
   padding: 1rem;
 }
-.promo_card{
-  width: 100%;
-  color: #fff;
-  margin-top: 10px;
-  border-radius: 8px;
-  padding: 0.5rem 1rem 1rem 3rem;
-  background: rgb(37, 37, 37);
-}
-.promo_card h1, .promo_card span, button{
-  margin: 10px;
-}
-.promo_card button{
-  display: block;
-  padding: 6px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.history_lists{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+
+
 .row{
   display: flex;
   justify-content: space-between;
@@ -241,63 +323,160 @@ table td{
 .sidebar{
   width: 15%;
   padding: 2rem 1rem;
-  background: #fff;
+  background:black;
 }
-.sidebar h4{
-  margin-bottom: 1.5rem;
-}
-.sidebar .balance{
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-.balance .icon{
-  color: #fff;
-  font-size: 20px;
-  border-radius: 6px;
-  margin-right: 1rem;
-  padding: 1rem;
-  background: rgb(37, 37, 37);
-}
-.balance .info h5{
-  font-size: 16px;
-}
-.balance .info span{
-  font-size: 14px;
-  color: rgb(100, 100, 100);
-}
-.balance .info i{
-  margin-right: 2px;
-}
-    </style>
-</head>
 
-<span style="font-family: verdana, geneva, sans-serif;"><!DOCTYPE html>
+
+.accept-btn{
+    background-color: black;
+            color: white;
+            padding: 5px;
+            border-color: transparent;
+            border-radius: 10px;
+}
+
+    </style>
+    </span>
+</head>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Admin Dashboard</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
-  <header class="header">
-    <div class="logo">
-      <a href="#">Admin</a>
-     
+  <div class="sidebar">
+    <div class="sidebar-brand">
+      <h1><span class="las la-plane"></span>Admin</h1>
     </div>
-  <div class="container">
-    <nav>
-      <div class="side_navbar">
-        <span>Main Menu</span>
-        <a href="#" class="active">Dashboard</a>
-      </div>
-    </nav>
+  <div class="sidebar-menu">
+    <ul>
+      <li>
+        <a href="" class="active"><span class="las la-igloo"></span><span>Dashboard</span></a>
 
-    <div class="main-body">
+      </li>
+      <li>
+      <a href="../login/logout.php"><span class="las la-sign-out-alt"></span><span>Logout</span></a>
+
+      </li>
+    </ul>
+  </div>
+</div>
+  <div class="main-content">
+  <header>
+    <h2>
+      <label for=""></label>
+    </h2>
+    Admin Dashboard
+  </header>
+  <main>
+    <div class="cards">
+      <div class="card-single">
+        <div>
+        <h1>
+          <?php echo $pendingCount; ?>
+        </h1>
+        <span>Pending Passengers</span>
+      </div>
+    <div>
+        <span class="las la-users"></span>
+      </div>
+</div>
+    <div class="card-single">
+      <div>
+        <h1><?php echo $registeredCount; ?></h1>
+        <span>Registered Passengers</span>
+      </div>
+      <div>
+        <span class="las la-users"></span>
+      </div>
+    </div>
+</div>
+<div class="recent-grid">
+  <div class="project">
+    <div class="card">
+      <div class="card-header">
+        <h2>Pending Passengers</h2>
+      </div>
+      <div class="card-body">
+      <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Booking ID</th>
+                <th>Flight ID</th>
+                <th>Payment Method</th>
+              </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($pendingPassengers as $passenger): ?>
+                <tr>
+                    <td><?php echo $passenger['PassengerID']; ?></td>
+                    <td><?php echo $passenger['BookingID']; ?></td>
+                    <td><?php echo $passenger['FlightID']; ?></td>
+                    <td><?php echo $passenger['PaymentMethod']; ?></td>
+                    <td>
+                        <form method="POST" action="handlePassengers.php?flight_id=<?php echo $flightId; ?>">
+                        <input type="hidden" name="booking_id" value="<?php echo $passenger['BookingID']; ?>">
+                            <button class="accept-btn" type="submit" name="accept_passenger">Accept</button>
+                            <!-- <button class="reject-btn" type="submit" name="reject_passenger">Reject</button> -->
+                        </form>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+  <div class="customers">
+    <div class="card">
+      <div class="card-header">
+        <h2>Registered Passengers</h2>
+      </div>
+      <div class="card-body">
+        <div class="customer">
+          <div>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                
+                <th>Booking ID</th>
+                <th>Flight ID</th>
+                <th>Payment Method</th>
+              </tr>
+            </thead>
+            <tbody>
+                    <?php foreach ($registeredPassengers as $passenger): ?>
+                        <tr>
+                       
+                       
+                        <td><?php echo $passenger['PassengerID']; ?></td>
+                           
+                        <td><?php echo $passenger['Name']; ?></td>
+                            
+                            <td><?php echo $passenger['BookingID']; ?></td>
+                            <td><?php echo $passenger['FlightID']; ?></td>
+                            <td><?php echo $passenger['PaymentMethod']; ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </main>
+    <!-- <div class="main-body">
       <h2>Dashboard</h2>
       <div class="promo_card">
-        <h1>Welcome To Admin Dashboard!</h1>
+        <h2>Welcome To Admin Dashboard!</h2>
       </div>
 
       <div class="history_lists">
@@ -309,16 +488,18 @@ table td{
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Name</th>
-                <th>Amount</th>
+                <th>Booking ID</th>
+                <th>Flight ID</th>
+                <th>Payment Method</th>
               </tr>
             </thead>
             <tbody>
             <?php foreach ($pendingPassengers as $passenger): ?>
                 <tr>
                     <td><?php echo $passenger['PassengerID']; ?></td>
-                    <!-- <td><?php echo $passenger['Name']; ?></td>
-                    <td><?php echo $passenger['Amount']; ?></td> -->
+                    <td><?php echo $passenger['BookingID']; ?></td>
+                    <td><?php echo $passenger['FlightID']; ?></td>
+                    <td><?php echo $passenger['PaymentMethod']; ?></td>
                     <td>
                         <form method="POST" action="handlePassengers.php?flight_id=<?php echo $flightId; ?>">
                         <input type="hidden" name="booking_id" value="<?php echo $passenger['BookingID']; ?>">
@@ -354,7 +535,6 @@ table td{
           </table>
         </div>
     </div>
-  </div>
+  </div> -->
 </body>
 </html>
-</span>

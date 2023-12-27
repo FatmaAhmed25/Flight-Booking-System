@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $from = $_POST['from'];
     $to = $_POST['to'];
 
-    $query = "SELECT * FROM Flight WHERE source='$from' AND destination='$to' AND Canceled = false";
+    $query = "SELECT * FROM Flight WHERE source='$from' AND destination='$to' AND Canceled = false AND CAPACITY>0" ;
     $result = mysqli_query($conn, $query);
 
     if ($result) {

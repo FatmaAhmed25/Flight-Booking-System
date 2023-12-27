@@ -56,8 +56,10 @@ CREATE TABLE Flight (
 CREATE TABLE PassengerFlights (
     PassengerID INT,
     FlightID INT,
-    Status ENUM('completed', 'pending'),
+    Status ENUM('completed', 'current'),
+    companystatus ENUM('registered','pending')
     PaymentMethod ENUM('account', 'cash'), 
+    BookingID INT AUTO_INCREMENT PRIMARY KEY,
     FOREIGN KEY (PassengerID) REFERENCES Passenger(ID),
     FOREIGN KEY (FlightID) REFERENCES Flight(ID)
 );

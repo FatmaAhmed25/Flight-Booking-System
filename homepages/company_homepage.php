@@ -25,7 +25,6 @@ if ($result) {
 
 $company= $userData['ID'];
 // Fetch the list of flights associated with the company
-// Fetch the list of flights associated with the company
 $flightsQuery = "SELECT * FROM Flight WHERE CompanyID = $company AND Canceled = false";
 $flightsResult = mysqli_query($conn, $flightsQuery);
 
@@ -541,7 +540,7 @@ i{
             <ul>
               <!-- <li><a href="../flight/add_flight.php" class="btn btn-primary">Add Flight</a></li> -->
               <li><a href="">List Flights</a></li>
-              <li><a href="">Messages</a></li>
+             
             </ul>
             <button><a href="../flight/add_flight.php" >Add Flight</a></button>
           </nav>

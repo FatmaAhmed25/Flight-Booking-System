@@ -155,7 +155,6 @@ if (isset($_FILES['new_passport_photo']) && $_FILES['new_passport_photo']['error
 
     
 
-//    // After processing the form submission, add:
 header("Location: profile.php");
 exit();
 }

@@ -37,10 +37,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Get the company ID from the flight
             $company_id = $flight['CompanyID'];
             $paymentM = $_POST['payment_method'];
-            // Create the message
+        
             $message = "The passenger with ID $passenger_id booked the flight with ID $flight_id by  $paymentM.";
 
-            // Insert the message into the CompanyMessages table
+            // Insert the message 
             $query = "INSERT INTO CompanyMessages (CompanyID, Message, PassengerID) VALUES ('$company_id', '$message', '$passenger_id')";
             $result = mysqli_query($conn, $query);
 
@@ -426,21 +426,10 @@ mysqli_close($conn);
         }
 
         #confirmationModal .modal-box {
-
-            /* left: 50%;
-  top: 50%; */
-            /* z-index: 2;
-  padding: 30px 20px;
-  border-radius: 24px; */
             background-color: #fff;
             width: 350px;
             height: 300px;
             border-radius: 20px;
-
-            /* opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s ease;
-  transform: translate(-50%, -50%) scale(1.2); */
         }
 
 

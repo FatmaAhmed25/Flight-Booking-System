@@ -223,7 +223,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cancel_flight'])) {
             font-size: 15px;
             font-weight: 600;
             color: #653d58;
-          
+
 
         }
 
@@ -313,7 +313,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cancel_flight'])) {
             padding: 20px;
             border: 1px solid #888;
             width: 50%;
-            /* Adjust width */
+
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -374,10 +374,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cancel_flight'])) {
         /* .btn {
             margin-left: 10px;
         } */
-        .button2{
+        .button2 {
             margin-right: 20px;
         }
-       
+
 
 
 

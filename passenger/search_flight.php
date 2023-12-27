@@ -164,12 +164,12 @@ mysqli_close($conn);
     }
 
     .booking__container .btn {
-    padding: 0.8rem; /* Adjusted padding to minimize the size */
-    font-size: 1.2rem; /* Adjusted font size */
-    background-color: var(--primary-color); /* Added background color */
-    color: var(--white); /* Added text color */
-    border: none; /* Removed border */
-    border-radius: 5px; /* Added border radius for rounded corners */
+    padding: 0.8rem;
+    font-size: 1.2rem; 
+    background-color: var(--primary-color); 
+    color: var(--white);
+    border: none; 
+    border-radius: 5px; 
     cursor: pointer;
     margin-left: 134px;
     margin-right: 201px;
@@ -177,7 +177,7 @@ mysqli_close($conn);
   }
 
   .booking__container .btn:hover {
-    background-color: var(--primary-color-dark); /* Added hover effect */
+    background-color: var(--primary-color-dark); 
   }
   .card-container {
     display: grid;
@@ -213,8 +213,8 @@ mysqli_close($conn);
       border-bottom: 1px solid #ddd;
     }
     .card a {
-        color: inherit;      /* changes the link color to the color of the text in the card */
-        text-decoration: none;  /* removes the underline */
+        color: inherit;      
+        text-decoration: none;  
       }
     .card-content {
       padding: 20px;

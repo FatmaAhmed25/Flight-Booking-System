@@ -221,7 +221,6 @@ body{
 .toggle{
     background-color:#000543;
     height: 100%;
-    /* background: linear-gradient(to right, #5c6bc0, #512da8); */
     color: #fff;
     position: relative;
     left: -100%;

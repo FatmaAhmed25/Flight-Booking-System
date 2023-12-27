@@ -267,8 +267,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: #fd891e;
         }
         .city-entry input {
-    width: calc(33.33% - 5px); /* Adjust the width to fit three items in a row with a small gap */
-    margin-right: 5px; /* Add a small gap between the city inputs */
+    width: calc(33.33% - 5px); 
+    margin-right: 5px; 
 }
     </style>
 

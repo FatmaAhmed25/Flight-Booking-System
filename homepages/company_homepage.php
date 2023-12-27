@@ -50,7 +50,7 @@ while ($row = mysqli_fetch_assoc($result2)) {
 
 
     
-// Check if the markAllAsRead POST parameter is set
+
 if (isset($_POST['markAllAsRead'])) {
   $query = "UPDATE CompanyMessages SET IsRead = TRUE WHERE CompanyID = '$company'";
   $result = mysqli_query($conn, $query);
@@ -527,12 +527,7 @@ i{
             <?php echo $userData['Bio']; ?>
             </p>
 
-            <!-- <ul>
-              <li><i class="fab fa-twitter"></i></li>
-              <i class="fab fa-pinterest"></i>
-              <i class="fab fa-facebook"></i>
-              <i class="fab fa-dribbble"></i>
-            </ul> -->
+     
           </div>
         </div>
         <div class="right__col">
@@ -556,7 +551,7 @@ i{
                 <img src="<?php echo $photoPaths[$photoIndex % count($photoPaths)]; ?>" alt="Random Photo">
                 <div class="flight-info">
                     <h3><?php echo $flight['Name']; ?></h3>
-                    <!-- Add other flight information as needed -->
+                
                 </div>
             </a>
         </li>
@@ -595,7 +590,7 @@ i{
 <script>
 function markAllAsRead() {
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "", true);  // POST to the current page
+  xhr.open("POST", "", true); 
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {

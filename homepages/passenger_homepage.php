@@ -225,16 +225,15 @@ exit();
 
     .header__wrapper .cols__container .right__col nav button {
       background: #0091ff;
-      /* Your existing background color */
+  
       color: #fff;
       border: none;
       padding: 10px 25px;
       border-radius: 4px;
       cursor: pointer;
       margin-top: 20px;
-      /* Add the following line to set the background color */
       background-color: #C63826;
-      /* Add your desired color value */
+     
     }
 
     .header__wrapper .cols__container .right__col nav button:hover {
@@ -310,26 +309,22 @@ exit();
 
     .flight-card {
       width: calc(33.33% - 20px);
-      /* Adjust width based on your layout preferences */
       margin-bottom: 20px;
       box-sizing: border-box;
       box-shadow: 1px 3px 12px rgba(0, 0, 0, 0.18);
       border-radius: 8px;
       overflow: hidden;
-     
       transition: transform 0.3s ease-in-out;
     }
 
     .flight-card:hover {
       transform: scale(1.05);
-      /* Adjust the scale factor based on your preference */
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
 
     .flight-card img {
       width: 100%;
       height: 120px;
-      /* Set your desired image height */
       object-fit: cover;
     }
 
@@ -350,26 +345,24 @@ exit();
 
     .firstnav nav {
       background: rgba(0, 0, 0, 0.5);
-      /* Set the background color with transparency */
       padding: 10px;
       position: fixed;
       width: 100%;
       display: flex;
       justify-content: space-between;
       z-index: 1000;
-      /* Set a higher z-index to ensure it's above other content */
+
     }
 
     .firstnav nav a {
       color: white;
       text-decoration: none;
       padding: 10px;
-      /* transition: background 0.3s ease; */
     }
 
     .firstnav nav a:hover {
       background: rgba(255, 255, 255, 0.2);
-      /* Set the hover background color with transparency */
+
     }
 
     .passenger-name {

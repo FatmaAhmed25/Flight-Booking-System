@@ -62,6 +62,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "Error executing query: " . mysqli_error($conn);
             }
 
+            // Decrement the number of pending passengers and increase the number of registered passengers
+    $query = "UPDATE Flight SET PendingPassengers = PendingPassengers - 1, RegisteredPassengers = RegisteredPassengers + 1 WHERE ID = '$flight_id'";
+    $result = mysqli_query($conn, $query);
+
+    if (!$result) {
+        echo "Error executing query: " . mysqli_error($conn);
+    }
+
             // Insert a record into the PassengerFlights table
             $query = "INSERT INTO PassengerFlights (PassengerID, FlightID, Status) VALUES ('$passenger_id', '$flight_id', 'current')";
             $result = mysqli_query($conn, $query);

@@ -89,6 +89,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         mysqli_close($conn);
     }
+    header("Location: ../homepages/company_homepage.php");
+exit(); 
 }
 ?>
 

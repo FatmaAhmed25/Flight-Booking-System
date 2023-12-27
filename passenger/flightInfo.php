@@ -522,10 +522,9 @@ mysqli_close($conn);
                 </div>
 
 
-
                 <div class="card-item">
                     <span class="label">Arrival Time</span>
-                    <p class="content">14:00 GST</p>
+                    <p class="content"><?php echo date('H:i', strtotime($flight["EndDay"])); ?> </p>
                 </div>
 
             </div>

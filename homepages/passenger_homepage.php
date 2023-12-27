@@ -31,7 +31,7 @@ WHERE pf.PassengerID = $passenger AND pf.Status = 'completed'";
   // Fetch current flights
   $currentFlightsQuery = "SELECT pf.*, f.* FROM PassengerFlights pf
 LEFT JOIN Flight f ON pf.FlightID = f.ID
-WHERE pf.PassengerID = $passenger AND pf.Status = 'current'";
+WHERE pf.PassengerID = $passenger AND pf.Status = 'current' AND pf.companystatus='registered'";
   $currentFlightsResult = mysqli_query($conn, $currentFlightsQuery);
   $currentFlights = mysqli_fetch_all($currentFlightsResult, MYSQLI_ASSOC);
 
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     echo "Error updating flight status: " . mysqli_error($conn);
   }
 
-  header("Location: passenger_homepage.php");
+ header("Location: passenger_homepage.php");
 exit();
 }
 

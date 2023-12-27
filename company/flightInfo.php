@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['flight_id'])) {
     }
 
     // Fetch the pending passengers
-    $query = "SELECT * FROM PassengerFlights JOIN Passenger ON PassengerFlights.PassengerID = Passenger.ID JOIN User ON Passenger.UserID = User.ID WHERE FlightID = '$flightId' AND Status = 'pending'";
+    $query = "SELECT * FROM PassengerFlights JOIN Passenger ON PassengerFlights.PassengerID = Passenger.ID JOIN User ON Passenger.UserID = User.ID WHERE FlightID = '$flightId' AND Status = 'current'";
     $result = mysqli_query($conn, $query);
     $pendingPassengers = [];
     if ($result) {

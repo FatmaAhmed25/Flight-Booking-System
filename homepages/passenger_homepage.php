@@ -450,7 +450,7 @@ a {
         </ul>
     </div>
     <div class="card flight-list" id="pending-flights" style="display: none;">
-        <h3>Pending Flights</h3>
+        <!-- <h3>Pending Flights</h3> -->
         <ul id="pending-flight-list">
             <?php if ($pendingFlightsCount > 0) : ?>
                 <?php while ($flight = mysqli_fetch_assoc($pendingFlightsResult)) : ?>

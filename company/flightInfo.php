@@ -135,12 +135,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cancel_flight'])) {
         mysqli_free_result($result);
     
         // Fetch the registered passengers
-        $query = "SELECT PassengerID FROM PassengerFlights WHERE FlightID = '$flightId' AND Status = 'completed'";
+        $query = "SELECT PassengerID FROM PassengerFlights WHERE FlightID = '$flightId' AND companyStatus = 'registered' AND Status='current' AND PaymentMethod='account' ";
         $result = mysqli_query($conn, $query);
         while ($row = mysqli_fetch_assoc($result)) {
             // Refund the passenger
             $passengerId = $row["PassengerID"];
-            $query = "UPDATE Passenger SET Account = Account + '$fees' WHERE ID = '$passengerId'";
+
+            $query = "UPDATE Passenger SET Account = Account + '$fees' WHERE ID = '$passengerId' ";
             mysqli_query($conn, $query);
         }
         $query = "DELETE FROM PassengerFlights WHERE FlightID = '$flightId'";
@@ -389,24 +390,26 @@ h2{
     display: block;
 }
 
-.button {
 
+
+.button {
+    display: flex;
+    justify-content: space-between;
     margin-top: 30px;
-    /* padding-top: 30px;
-    padding-left: 410px; */
-   
 }
-button{
+
+button, .btn {
     background-color: #fd891e;
-    color:white;
+    color: white;
     padding: 10px;
-    border-color:transparent;
+    border-color: transparent;
     border-radius: 10px;
 }
 
-.btn{
-    padding-left:410px ;
-} 
+.btn {
+    margin-left: 10px; 
+}
+
 
 
 
@@ -502,6 +505,13 @@ button{
 </div>
 </div>
 </div>
+
+<div class="button">
+<form method="POST" action="handlePassengers.php?flight_id=<?php echo $flight['ID']; ?>" id="handlePassengersForm">
+    <button type="submit" id="handlePassengersButton">Handle Passengers</button>
+</form>
+</div>
+
 
 <!-- Cancel Flight Form -->
 <div class="button">

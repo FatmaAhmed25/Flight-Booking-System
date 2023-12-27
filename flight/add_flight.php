@@ -27,14 +27,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST["name"];
     $itinerary = $_POST["itinerary"];
     $fees = $_POST["fees"];
-    $passengers = $_POST["passengers"];
+    $capacity = $_POST["capacity"];
     $startDay = $_POST["startday"];
     $endDay = $_POST["endday"];
     $source = $_POST["source"];
     $destination = $_POST["destination"];
     $cities = isset($_POST['cities']) ? $_POST['cities'] : [];
 
-    if (empty($name) || empty($source) || empty($destination) || empty($itinerary) || empty($fees) || empty($passengers) || empty($startDay) || empty($endDay)) {
+    if (empty($name) || empty($source) || empty($destination) || empty($itinerary) || empty($fees) || empty($capacity) || empty($startDay) || empty($endDay)) {
         array_push($errors, "All fields are required");
     }
 
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'name' => $name,
         'itinerary' => $itinerary,
         'fees' => $fees,
-        'passengers' => $passengers,
+        'capacity' => $capacity,
         'startday' => $startDay,
         'endday' => $endDay,
         'source' => $source,
@@ -55,11 +55,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<div class='alert alert-danger'>$error</div>";
         }
     } else {
-        $insertFlightQuery = "INSERT INTO Flight (Name, Source, Destination, Itinerary, Fees, RegisteredPassengers, PendingPassengers, StartDay, EndDay, Completed, Canceled, CompanyID) VALUES (?, ?, ?, ?, ?, 0, ?, ?, ?, 0, false, ?)";
+        $insertFlightQuery = "INSERT INTO Flight (Name, Source, Destination, Itinerary, Fees, RegisteredPassengers, PendingPassengers,Capacity, StartDay, EndDay, Completed, Canceled, CompanyID) VALUES (?, ?, ?, ?, ?, 0, 0,?, ?, ?, 0, false, ?)";
         $stmtFlight = mysqli_prepare($conn, $insertFlightQuery);
 
         if ($stmtFlight) {
-            mysqli_stmt_bind_param($stmtFlight, "ssssddssd", $flightData['name'], $flightData['source'], $flightData['destination'], $flightData['itinerary'], $flightData['fees'], $flightData['passengers'], $flightData['startday'], $flightData['endday'], $companyId);
+            mysqli_stmt_bind_param($stmtFlight, "ssssddssd", $flightData['name'], $flightData['source'], $flightData['destination'], $flightData['itinerary'], $flightData['fees'], $flightData['capacity'], $flightData['startday'], $flightData['endday'], $companyId);
 
             if (mysqli_stmt_execute($stmtFlight)) {
                 $flightID = mysqli_insert_id($conn);
@@ -294,7 +294,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="input-box">
                     <span class="details">No of Passengers</span>
-                    <input type="number" id="passengers" name="passengers" required>
+                    <input type="number" id="passengers" name="capacity" required>
                 </div>
                 <div class="input-box">
                     <span class="details">Source</span>

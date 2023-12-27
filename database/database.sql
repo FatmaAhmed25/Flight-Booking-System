@@ -43,6 +43,7 @@ CREATE TABLE Flight (
     Fees DECIMAL(10,2),
     StartDay DATETIME,
     EndDay DATETIME,
+    Capacity INT,
     Completed BOOLEAN,
     CompanyID INT,
     Source varchar(255),
@@ -55,7 +56,26 @@ CREATE TABLE Flight (
 CREATE TABLE PassengerFlights (
     PassengerID INT,
     FlightID INT,
-    Status ENUM('completed', 'current'),
+    Status ENUM('completed', 'pending'),
+    PaymentMethod ENUM('account', 'cash'), 
     FOREIGN KEY (PassengerID) REFERENCES Passenger(ID),
     FOREIGN KEY (FlightID) REFERENCES Flight(ID)
+);
+
+
+CREATE TABLE Cities (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    FlightID INT,
+    CityName VARCHAR(255),
+    StartTime DATETIME,
+    EndTime DATETIME,
+    FOREIGN KEY (FlightID) REFERENCES Flight(ID)
+);
+
+CREATE TABLE companyMessages (
+    ID int AUTO_INCREMENT PRIMARY KEY, 
+    CompanyID int, 
+    Message text, 
+    PassengerID int,
+    IsRead BOOLEAN DEFAULT FALSE
 );

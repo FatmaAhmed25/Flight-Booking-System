@@ -31,18 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $passenger_id = $passenger['ID'];
         $passenger_account = $passenger['Account'];
 
-        if ($_POST['payment_method'] == 'account' && $passenger_account >= $flight['Fees']) {
-            $query = "UPDATE Passenger SET Account = Account - {$flight['Fees']} WHERE ID = '$passenger_id'";
-            $result = mysqli_query($conn, $query);
-
-            if (!$result) {
-                echo "Error executing query: " . mysqli_error($conn);
-            }
-        } else {
-            echo "Insufficient account balance.";
-        }
-
-        if ($result) {
+        if ($passenger_account >= $flight['Fees']) {
             echo "Flight booked successfully!";
 
             // Get the company ID from the flight
@@ -50,9 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $paymentM = $_POST['payment_method'];
             // Create the message
             $message = "The passenger with ID $passenger_id booked the flight with ID $flight_id by  $paymentM.";
-
-            // // Get the passenger's photo
-            // $passenger_photo = $passenger['Photo'];
 
             // Insert the message into the CompanyMessages table
             $query = "INSERT INTO CompanyMessages (CompanyID, Message, PassengerID) VALUES ('$company_id', '$message', '$passenger_id')";
@@ -63,20 +49,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             // Decrement the number of pending passengers and increase the number of registered passengers
-    $query = "UPDATE Flight SET PendingPassengers = PendingPassengers - 1, RegisteredPassengers = RegisteredPassengers + 1 WHERE ID = '$flight_id'";
-    $result = mysqli_query($conn, $query);
-
-    if (!$result) {
-        echo "Error executing query: " . mysqli_error($conn);
-    }
-
-            // Insert a record into the PassengerFlights table
-            $query = "INSERT INTO PassengerFlights (PassengerID, FlightID, Status) VALUES ('$passenger_id', '$flight_id', 'current')";
+            $query = "UPDATE Flight SET Capacity = Capacity - 1, PendingPassengers = PendingPassengers + 1 WHERE ID = '$flight_id'";
             $result = mysqli_query($conn, $query);
+
             if (!$result) {
                 echo "Error executing query: " . mysqli_error($conn);
             }
+            if ($_POST['payment_method'] == 'account') {
+                $query = "INSERT INTO PassengerFlights (PassengerID, FlightID, Status,companystatus,PaymentMethod) VALUES ('$passenger_id', '$flight_id', 'current','pending','account')";
+                $result = mysqli_query($conn, $query);
+                if (!$result) {
+                    echo "Error executing query: " . mysqli_error($conn);
+                }
+            } 
+            else {
+                $query = "INSERT INTO PassengerFlights (PassengerID, FlightID, Status,companystatus,PaymentMethod) VALUES ('$passenger_id', '$flight_id', 'current','pending','cash')";
+                $result = mysqli_query($conn, $query);
+                if (!$result) {
+                    echo "Error executing query: " . mysqli_error($conn);
+                }
+            }
+        } else {
+            echo "Insufficient account balance.";
         }
+
+
+
     } else {
         echo "Error executing query: " . mysqli_error($conn);
     }
@@ -543,37 +541,12 @@ mysqli_close($conn);
 
             </div>
 
-            <!-- <form action="flightInfoo.php?id=<?php echo $flight_id; ?>" method="post" onsubmit="return confirmBooking();">
-            <button type="submit" class="take-flight-btn">Take Flight</button>
-            </form>
-
-            <script>
-            function confirmBooking() {
-                return confirm('Are you sure you want to book this flight?');
-            }
-            </script>  -->
-
-
-
-
-
-            <!-- <div class="card-item">
-                <span class="label">book</span>
-                <p class="content">bb</p>
-            </div>
-
-            <div class="card-item">
-                <span class="label">Seat</span>
-                <p class="content">4D</p>
-            </div> -->
-
-
 
             <div class="card-item">
                 <span class="label">Remaining Passengers</span>
                 <a href="#" id="myBtn"><i class="fas fa-plane"></i></a>
                 <p class="content">
-                    <?php echo $flight["PendingPassengers"]; ?>
+                    <?php echo $flight["Capacity"]; ?>
                 </p>
             </div>
 
@@ -635,14 +608,6 @@ mysqli_close($conn);
             </script>
 
 
-
-
-
-
-
-
-
-
         </div>
     </div>
 
@@ -654,105 +619,3 @@ mysqli_close($conn);
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <script>
-
-document.querySelector("#takeFlightForm").addEventListener("submit", function(e) {
-    e.preventDefault(); // prevent the form from submitting
-
-    // Get the selected payment method
-    var paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
-
-    console.log(paymentMethod);
-    if (paymentMethod === "account") {
-        // If the user chose to pay by account, show a confirmation message
-        if (confirm("Are you sure you want to pay by account?")) {
-            this.submit(); // submit the form
-        }
-    } else {
-        // If the user chose to pay by cash, just submit the form
-        this.submit();
-    }
-});
-
-
-
-
-</script> -->
-
-
-
-
-
-
-<!--script>
-
-
-    // document.querySelector("#takeFlightForm").addEventListener("submit", function(e) {
-    //     e.preventDefault(); // prevent the form from submitting
-
-    //     // Get the selected payment method
-    //     console.log("Form submitted");
-    //     var paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
-
-    //     console.log(paymentMethod);
-    //     if (paymentMethod == "account") {
-    //         console.log('hiiiiii');
-    //         // If the user chose to pay by account, show a confirmation message
-    //         if (confirm("Are you sure you want to pay by account?")) {
-    //             this.submit(); // submit the form
-    //         }
-    //     } 
-    //     else{
-    //         //If the user chose to pay by cash, just submit the form
-    //         this.submit();
-    //     }
-    // });
-
-
-// When the user clicks the "Take Flight" button, open the confirmation modal
-// document.getElementById("takeFlightButton").addEventListener("click", function(e) {//take flight
-//   e.preventDefault();
-//   console.log("Take Flight button clicked");
-//   document.getElementById("confirmationModal").classList.add("active"); //confirm
-// //   document.getElementById("overlay").classList.add("active");
-// });
-
-// // Get the <span> element that closes the confirmation modal
-// var closeConfirmationModal = document.getElementById("closeConfirmationModal");
-
-// // When the user clicks on <span> (x) or "Cancel" button, close the confirmation modal
-// closeConfirmationModal.onclick = function() {
-//   document.getElementById("confirmationModal").classList.remove("active");
-// //   document.getElementById("overlay").classList.remove("active");
-// };
-
-// // When the user clicks anywhere outside of the confirmation modal, close it
-// window.onclick = function(event) {
-//   if (event.target == document.getElementById("confirmationModal")) {
-//     document.getElementById("confirmationModal").classList.remove("active");
-//     // document.getElementById("overlay").classList.remove("active");
-//   }
-// };
-
-
-// // Handle the "Yes, Take Flight" button click
-// document.getElementById("takeFlightConfirm").addEventListener("click", function() {
-//   // Add your logic for taking the flight here
-//   // For example, you can submit the form or perform an AJAX request
-//   document.getElementById("confirmationModal").classList.remove("active");
-// });
-
-</script-->
